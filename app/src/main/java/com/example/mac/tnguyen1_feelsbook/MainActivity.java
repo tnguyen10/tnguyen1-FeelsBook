@@ -1,15 +1,25 @@
 package com.example.mac.tnguyen1_feelsbook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextView dateView;
+    private EditText emotionView;
+    private EditText detailView;
+    private static Controller controller;
+    public static final String EXTRA_MESSAGE = "com.example.android.tnguyen-feelbook.extra.MESSAGE";
+    public String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,12 +28,28 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        // Get inputs view ids
+        controller = new Controller();
+        dateView = findViewById(R.id.date_id);
+        emotionView = findViewById(R.id.emotion_text_id);
+        detailView = findViewById(R.id.detail_id);
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // Save user inputs
+                boolean updateSucceed = controller.updateUserInputs(dateView,emotionView,detailView);
+                if (updateSucceed == true){
+                    Toast.makeText(MainActivity.this,"Your infos have been added",Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(MainActivity.this,"Invalid Input. Try Again",Toast.LENGTH_LONG).show();
+                }
+                controller.saveToFile(controller.getRecords(), MainActivity.this);
+                Intent intent = new Intent(MainActivity.this,MainActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -42,9 +68,14 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        //Switch to Emotion Count or History activities
+        if (id == R.id.emotion_count_id) {
+            Intent intent = new Intent(MainActivity.this,EmotionCount.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.history_id){
+            Intent intent = new Intent(MainActivity.this,History.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

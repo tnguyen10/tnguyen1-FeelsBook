@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">tnguyen1-FeelsBook</string>
     <string name="action_settings">Settings</string>
+    <string name="emotion_count_id">emotion_count_id</string>
+    <string name="history_id">history_id</string>
+    <string name="enter_your_emotion">Enter your emotion:</string>
+    <string name="enter_your_detail">Enter your detail:</string>
+    <string name="main">MAIN</string>
+    <string name="emotion_count">EMOTION COUNT</string>
+
 </resources>
