@@ -16,40 +16,42 @@ import java.util.Date;
 
 public class Item extends AppCompatActivity {
 
-    ArrayList<Record> records = new ArrayList<Record>();
+    private EditText date_edit_id_view;
+    private EditText emotion_edit_id_view;
+    private EditText detail_edit_id_view;
+    private Button button_edit_id_view;
+    private Button delete_button_edit_id_view;
     private static Controller controller;
+    ArrayList<Record> records = new ArrayList<Record>();
     int position;
-    EditText date_edit_id_view;
-    EditText emotion_edit_id_view;
-    EditText detail_edit_id_view;
-    Button button_edit_id_view;
-    Button delete_button_edit_id_view;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
 
+        // Get position from History Activity
         Intent intent = getIntent();
         position = intent.getIntExtra("position",0);
         controller = new Controller();
 
+        // Get views
         date_edit_id_view = (EditText) findViewById(R.id.date_edit_id);
         emotion_edit_id_view = (EditText) findViewById(R.id.emotion_edit_id);
         detail_edit_id_view = (EditText) findViewById(R.id.detail_edit_id);
         button_edit_id_view = findViewById(R.id.button_edit_id);
         delete_button_edit_id_view = findViewById(R.id.delete_button_edit_id);
-
-
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        records = controller.loadFromFile(Item.this, "records");
+
+        // Get record list
+        records = controller.loadFromFile(Item.this);
         Record selRecord = records.get(position);
 
+        // Set text from record to be edited
         date_edit_id_view.setText(selRecord.getDate().toString());
         emotion_edit_id_view.setText(selRecord.getEmotion());
         detail_edit_id_view.setText(selRecord.getDetail());
@@ -57,12 +59,18 @@ public class Item extends AppCompatActivity {
     }
 
     public void saveButton(View view) throws ParseException {
+
+        // Get user inputs
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
         Date newDate = formatter.parse(date_edit_id_view.getText().toString());
         String newEmotion = emotion_edit_id_view.getText().toString();
         String newDetail = detail_edit_id_view.getText().toString();
+
+        // Create new record and update record list
         Record newRecord = new Record(newDate,newEmotion,newDetail);
         records.set(position,newRecord);
+
+        // Save to file and return to History Activity
         controller.saveToFile(records, Item.this);
         Toast.makeText(Item.this,"Your infos have been updated",Toast.LENGTH_LONG).show();
         Intent intent = new Intent(Item.this,History.class);
@@ -70,8 +78,12 @@ public class Item extends AppCompatActivity {
     }
 
     public void deleteButton(View view){
+
         if (records.size() != 0){
+            // Remove record from record list
             records.remove(position);
+
+            // Save to file and return to History Activity
             controller.saveToFile(records, Item.this);
             Toast.makeText(Item.this,"Your infos have been updated",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(Item.this,History.class);
@@ -79,6 +91,6 @@ public class Item extends AppCompatActivity {
         }else{
             Toast.makeText(Item.this,"There's nothing to delete",Toast.LENGTH_LONG).show();
         }
-
     }
+
 }

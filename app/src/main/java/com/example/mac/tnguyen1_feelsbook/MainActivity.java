@@ -29,19 +29,22 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        // Get inputs view ids
-        controller = new Controller();
+        // Get view and initialize controller
         dateView = findViewById(R.id.date_id);
         emotionView = findViewById(R.id.emotion_id);
         detailView = findViewById(R.id.detail_id);
+        controller = new Controller();
 
-        controller.setRecords(controller.loadFromFile(MainActivity.this,"records"));
+        // Update controller record list
+        controller.setRecords(controller.loadFromFile(MainActivity.this));
 
+        // Button clicked
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Save user inputs
+
+                // Update user inputs and save to file
                 boolean updateSucceed = controller.updateUserInputs(dateView,emotionView,detailView);
                 if (updateSucceed == true){
                     Toast.makeText(MainActivity.this,"Your infos have been added",Toast.LENGTH_LONG).show();
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,"Invalid Input. Try Again",Toast.LENGTH_LONG).show();
                 }
                 controller.saveToFile(controller.getRecords(), MainActivity.this);
+
+                // Restart back to main activity
                 Intent intent = new Intent(MainActivity.this,MainActivity.class);
                 startActivity(intent);
             }
@@ -64,9 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //Switch to Emotion Count or History activities
