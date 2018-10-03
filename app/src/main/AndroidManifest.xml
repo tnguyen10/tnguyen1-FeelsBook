@@ -19,12 +19,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EmotionCount" android:label="Emotion Count" android:parentActivityName=".MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".MainActivity"/>
+        <activity
+            android:name=".EmotionCount"
+            android:label="Emotion Count"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
-
-        <activity android:name=".History" android:label="History" android:parentActivityName=".MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".MainActivity"/>
+        <activity
+            android:name=".History"
+            android:label="History"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".Item"
+            android:label="Item"
+            android:parentActivityName=".History">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".History" />
         </activity>
     </application>
 

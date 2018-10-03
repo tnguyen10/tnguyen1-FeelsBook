@@ -32,9 +32,10 @@ public class MainActivity extends AppCompatActivity {
         // Get inputs view ids
         controller = new Controller();
         dateView = findViewById(R.id.date_id);
-        emotionView = findViewById(R.id.emotion_text_id);
+        emotionView = findViewById(R.id.emotion_id);
         detailView = findViewById(R.id.detail_id);
 
+        controller.setRecords(controller.loadFromFile(MainActivity.this,"records"));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
