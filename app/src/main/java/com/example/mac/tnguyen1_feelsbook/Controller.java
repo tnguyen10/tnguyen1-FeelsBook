@@ -43,18 +43,18 @@ public class Controller implements Serializable {
 
 
     // Get user inputs, create a new record and update the records list
-    public boolean updateUserInputs(TextView dateView, EditText emotionView, EditText detailView){
+    public boolean updateUserInputs(TextView dateView, String emotion, EditText detailView){
         // Get user inputs
         userDate = new Date(System.currentTimeMillis());
-        userEmotion = emotionView.getText().toString();
+        userEmotion = emotion;
         userDetail = detailView.getText().toString();
 
-        // Invalid inputs
-        if (emotionView.getText().length() == 0){
-            return false;
-        }
+        // Invalid inputs and no detail
         if (detailView.getText().length() > 100){
             return false;
+        }
+        if (detailView.getText().length() == 0){
+            userDetail = "";
         }
 
         // Add to records list
@@ -77,6 +77,7 @@ public class Controller implements Serializable {
             }
         }
 
+        // stackoverflow check readme
         // Put this into string format to be viewed by list view adapter
         for (Map.Entry<String, Integer> entry : emotionCount.entrySet()) {
             String key = entry.getKey();
@@ -85,57 +86,5 @@ public class Controller implements Serializable {
             emotionStrings.add(keyValue);
         }
         return (emotionStrings.toArray(new String[emotionStrings.size()]));
-    }
-
-
-    // Order record list
-    public class DateCompare implements Comparator<Record> {
-        @Override
-        public int compare(Record r1, Record r2) {
-            return r1.getDate().compareTo(r2.getDate());
-        }
-    }
-    public void orderRecords(ArrayList<Record> records){
-        Collections.sort(records, new DateCompare() );
-    }
-
-
-    // Save to file "records.sav" records list
-    public void saveToFile(ArrayList<Record> records, Context context){
-        orderRecords(records);
-        String RECORDFILE = "records.sav";
-
-        try{
-            FileOutputStream fos = context.openFileOutput(RECORDFILE,0);
-            OutputStreamWriter osw = new OutputStreamWriter(fos);
-            BufferedWriter writer = new BufferedWriter(osw);
-            Gson gson = new Gson();
-            gson.toJson(records, writer);
-            writer.flush();
-            fos.close();
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
-
-    // Load from file into records list
-    public ArrayList<Record> loadFromFile(Context context){
-        String RECORDFILE = "records.sav";
-        ArrayList<Record> fileList = new ArrayList<Record>();
-
-        try{
-            FileInputStream fis = context.openFileInput(RECORDFILE);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader reader = new BufferedReader(isr);
-            Gson gson = new Gson();
-            Type listTweetType = new TypeToken<ArrayList<Record>>(){}.getType();
-            fileList = gson.fromJson(reader, listTweetType);
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
-        return(fileList);
     }
 }

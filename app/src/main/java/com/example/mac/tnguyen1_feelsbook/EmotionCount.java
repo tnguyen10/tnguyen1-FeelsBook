@@ -15,6 +15,7 @@ public class EmotionCount extends AppCompatActivity {
 
     private ListView emotionCountListView;
     private static Controller controller;
+    private static SaveLoadFile saveloadfile;
     ArrayList<Record> records = new ArrayList<Record>();
     String[] emotionCountString;
 
@@ -23,9 +24,10 @@ public class EmotionCount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emotion_count);
 
-        // Get list view and init controller
+        // Get list view and init controller, saveloadfile
         emotionCountListView = (ListView)findViewById(R.id.emotion_list_id);
         controller = new Controller();
+        saveloadfile = new SaveLoadFile();
     }
 
     @Override
@@ -33,7 +35,7 @@ public class EmotionCount extends AppCompatActivity {
         super.onStart();
 
         // Load from file records list, Count emotion and output to list view
-        records = controller.loadFromFile(EmotionCount.this);
+        records = saveloadfile.loadFromFile(EmotionCount.this);
         emotionCountString = controller.countEmotions(records);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.item_list, emotionCountString);
         emotionCountListView.setAdapter(adapter);

@@ -17,6 +17,7 @@ public class History extends AppCompatActivity implements AdapterView.OnItemClic
 
     private ListView historyListView;
     private static Controller controller;
+    private static SaveLoadFile saveloadfile;
     ArrayList<Record> records = new ArrayList<Record>();
 
     @Override
@@ -24,9 +25,10 @@ public class History extends AppCompatActivity implements AdapterView.OnItemClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        // Get list view, init controller and its listener
+        // Get list view, init controller and its listener and init saveloadfile
         historyListView = (ListView)findViewById(R.id.history_list_id);
         controller = new Controller();
+        saveloadfile = new SaveLoadFile();
         historyListView.setOnItemClickListener(this);
 
     }
@@ -36,11 +38,12 @@ public class History extends AppCompatActivity implements AdapterView.OnItemClic
         super.onStart();
 
         // Get records from file and output
-        records = controller.loadFromFile(History.this);
+        records = saveloadfile.loadFromFile(History.this);
         ArrayAdapter<Record> adapter = new ArrayAdapter<Record>(this, R.layout.item_list,records);
         historyListView.setAdapter(adapter);
     }
 
+    // stackoverflow check readme
     public void onItemClick(AdapterView<?> l, View v, int position, long id){
 
         // Get position of clicked item and pass it on to Item Activity for later processing

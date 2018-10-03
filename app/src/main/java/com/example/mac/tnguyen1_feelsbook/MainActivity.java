@@ -18,8 +18,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText emotionView;
     private EditText detailView;
     private static Controller controller;
+    private static SaveLoadFile saveloadfile;
     public static final String EXTRA_MESSAGE = "com.example.android.tnguyen-feelbook.extra.MESSAGE";
     public String message;
+    private String emotion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,37 +30,58 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        // Get view and initialize controller
+        // Get view and initialize controller,saveloadfile
         dateView = findViewById(R.id.date_id);
-        emotionView = findViewById(R.id.emotion_id);
         detailView = findViewById(R.id.detail_id);
         controller = new Controller();
+        saveloadfile = new SaveLoadFile();
 
         // Update controller record list
-        controller.setRecords(controller.loadFromFile(MainActivity.this));
-
-        // Button clicked
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // Update user inputs and save to file
-                boolean updateSucceed = controller.updateUserInputs(dateView,emotionView,detailView);
-                if (updateSucceed == true){
-                    Toast.makeText(MainActivity.this,"Your infos have been added",Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(MainActivity.this,"Invalid Input. Try Again",Toast.LENGTH_LONG).show();
-                }
-                controller.saveToFile(controller.getRecords(), MainActivity.this);
-
-                // Restart back to main activity
-                Intent intent = new Intent(MainActivity.this,MainActivity.class);
-                startActivity(intent);
-            }
-        });
+        controller.setRecords(saveloadfile.loadFromFile(MainActivity.this));
     }
+
+    // BUTTON CLICKED
+    public void loveClicked(View view){
+        emotion = "love";
+        updateUserInput();
+    }
+    public void joyClicked(View view){
+        emotion = "joy";
+        updateUserInput();
+    }
+    public void surpriseClicked(View view){
+        emotion = "surprise";
+        updateUserInput();
+    }
+    public void angerClicked(View view){
+        emotion = "anger";
+        updateUserInput();
+    }
+    public void sadnessClicked(View view){
+        emotion = "sadness";
+        updateUserInput();
+    }
+    public void fearClicked(View view){
+        emotion = "fear";
+        updateUserInput();
+    }
+
+    public void updateUserInput(){
+
+        // Update user inputs and save to file
+        boolean updateSucceed = controller.updateUserInputs(dateView,emotion,detailView);
+        if (updateSucceed == true){
+            Toast.makeText(MainActivity.this,"Your infos have been added",Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(MainActivity.this,"Invalid Input. Try Again",Toast.LENGTH_LONG).show();
+        }
+        saveloadfile.saveToFile(controller.getRecords(), MainActivity.this);
+
+        // Restart back to main activity
+        Intent intent = new Intent(MainActivity.this,MainActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

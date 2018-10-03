@@ -22,6 +22,7 @@ public class Item extends AppCompatActivity {
     private Button button_edit_id_view;
     private Button delete_button_edit_id_view;
     private static Controller controller;
+    private static SaveLoadFile saveloadfile;
     ArrayList<Record> records = new ArrayList<Record>();
     int position;
 
@@ -30,10 +31,11 @@ public class Item extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
 
-        // Get position from History Activity
+        // Get position from History Activity; init controller and saveloadfile
         Intent intent = getIntent();
         position = intent.getIntExtra("position",0);
         controller = new Controller();
+        saveloadfile = new SaveLoadFile();
 
         // Get views
         date_edit_id_view = (EditText) findViewById(R.id.date_edit_id);
@@ -48,7 +50,7 @@ public class Item extends AppCompatActivity {
         super.onStart();
 
         // Get record list
-        records = controller.loadFromFile(Item.this);
+        records = saveloadfile.loadFromFile(Item.this);
         Record selRecord = records.get(position);
 
         // Set text from record to be edited
@@ -71,7 +73,7 @@ public class Item extends AppCompatActivity {
         records.set(position,newRecord);
 
         // Save to file and return to History Activity
-        controller.saveToFile(records, Item.this);
+        saveloadfile.saveToFile(records, Item.this);
         Toast.makeText(Item.this,"Your infos have been updated",Toast.LENGTH_LONG).show();
         Intent intent = new Intent(Item.this,History.class);
         startActivity(intent);
@@ -84,7 +86,7 @@ public class Item extends AppCompatActivity {
             records.remove(position);
 
             // Save to file and return to History Activity
-            controller.saveToFile(records, Item.this);
+            saveloadfile.saveToFile(records, Item.this);
             Toast.makeText(Item.this,"Your infos have been updated",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(Item.this,History.class);
             startActivity(intent);

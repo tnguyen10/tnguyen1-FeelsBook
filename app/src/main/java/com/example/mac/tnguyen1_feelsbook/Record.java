@@ -1,6 +1,8 @@
 package com.example.mac.tnguyen1_feelsbook;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Record {
     private Date date;
@@ -37,6 +39,9 @@ public class Record {
 
     // For printing
     public String toString() {
-        return this.date.toString() + " " + this.emotion + " " + this.detail;
+        // stackoverflow check readme
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.UK);
+        String date = sdf.format(this.date);
+        return date + " " + this.emotion + " || " + this.detail;
     }
 }
